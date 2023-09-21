@@ -19,6 +19,11 @@ app.use(bodyParser.json());
 var cors = require("cors");
 app.use(cors());
 
+//
+// CHECK --------------------------------------------------------
+// https://expressjs.com/en/starter/static-files.html
+// app.use("/static", express.static("/public"));
+
 // ---------------------------------------------------------------------------------------------
 // app.delete("/services/booked/:id", async (req, res) => {
 //   const client = new MongoClient(uri);
@@ -65,7 +70,7 @@ app.use(cors());
 //   }
 // });
 // ---------------------------------------------------------------------------------------------
-app.post("/services/booked", async (req, res) => {
+app.post("/instructor/booking", async (req, res) => {
   const client = new MongoClient(uri);
 
   try {
@@ -90,7 +95,7 @@ app.post("/services/booked", async (req, res) => {
   }
 });
 // ---------------------------------------------------------------------------------------------
-app.get("/services", async (req, res) => {
+app.get("/instructor", async (req, res) => {
   const client = new MongoClient(uri);
 
   try {
@@ -117,7 +122,7 @@ app.get("/services", async (req, res) => {
 
 // ---------------------------------------------------------------------------------------------
 
-app.put("/classes/booking/rescheduled/:id", async (req, res) => {
+app.put("/student/rescheduled/:id", async (req, res) => {
   const client = new MongoClient(uri);
 
   try {
@@ -172,7 +177,7 @@ app.post("/student/booking", async (req, res) => {
 // --------------------------------------------------------------------------------------
 
 // /classes/booking/bookedclasses
-app.get("/student/dashboard", async (req, res) => {
+app.get("/student/booking", async (req, res) => {
   const client = new MongoClient(uri);
 
   try {
@@ -199,7 +204,7 @@ app.get("/student/dashboard", async (req, res) => {
 // --------------------------------------------------------------------------------------
 
 //Read route-get request for the route
-app.get("/student", async (req, res) => {
+app.get("/", async (req, res) => {
   const client = new MongoClient(uri);
 
   try {
@@ -222,6 +227,20 @@ app.get("/student", async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------------------------------------------
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  // Handle errors and respond with JSON
+  res
+    .status(500)
+    .json({ error: "An error occurred while processing the request." });
+});
+
+// https://expressjs.com/en/starter/faq.html
+app.use((req, res, next) => {
+  res.status(404).sendFile(__dirname + "/public/404.html");
+});
 // ---------------------------------------------------------------------------------------------
 
 app.listen(port, () => {
