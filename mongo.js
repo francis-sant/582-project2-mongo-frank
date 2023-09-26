@@ -25,24 +25,25 @@ app.use(cors());
 // app.use("/static", express.static("/public"));
 
 // ---------------------------------------------------------------------------------------------
-// app.delete("/services/booked/:id", async (req, res) => {
-//   const client = new MongoClient(uri);
+app.delete("/instructor/students/:id", async (req, res) => {
+  const client = new MongoClient(uri);
 
-//   try {
-//     await client.connect();
-//     const database = client.db("mongodemo");
-//     const collection = database.collection("services");
-//     const result = await collection.deleteOne({ id: req.body.id });
-//     res.send(result);
-//   } catch (err) {
-//     //The default error handler
-//     console.error("Error retrieving data:", err);
+  try {
+    await client.connect();
+    const database = client.db("bookingApp");
+    const collection = database.collection("bookedClasses");
+    const result = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+    res.send(result);
+  } catch (err) {
+    
+    console.error("Error retrieving data:", err);
 
-//     res.status(500).json({ error: "An error occurred while retrieving data." });
-//   } finally {
-//     await client.close();
-//   }
-// });
+    res.status(500).json({ error: "An error occurred while retrieving data." });
+  } finally {
+    await client.close();
+  }
+});
+
 
 // ---------------------------------------------------------------------------------------------
 // app.get("/services/booked/", async (req, res) => {
